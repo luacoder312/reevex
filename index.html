@@ -27,26 +27,29 @@
             padding-bottom: 100px;
         }
 
+        /* --- ✨ ANIMATED STAR BACKGROUND --- */
         #particle-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 50% -20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%);
+            z-index: -1; /* Keeps it behind everything */
+            background: linear-gradient(180deg, #020205 0%, #050510 100%);
+            overflow: hidden;
         }
 
-        .particle {
+        .star {
             position: absolute;
             background: #fff;
             border-radius: 50%;
-            opacity: 0.2;
-            animation: floatUp linear infinite;
+            opacity: 0.8;
+            animation: moveStar linear infinite;
         }
 
-        @keyframes floatUp {
-            0% { transform: translateY(110vh) scale(0); opacity: 0; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        @keyframes moveStar {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100vh); } /* Stars move upwards */
         }
 
+        /* --- NOTIFICATION SYSTEM --- */
         #notification {
             position: fixed;
             top: 20px;
@@ -66,6 +69,7 @@
         }
         #notification.show { transform: translateX(-50%) translateY(0); }
 
+        /* --- HEADER --- */
         header {
             padding: 40px 20px;
             display: flex;
@@ -87,6 +91,7 @@
         .brand-text .scripts-word { color: var(--primary-glow); }
         .brand-text p { font-size: 12px; letter-spacing: 3px; color: var(--text-dim); margin-top: 5px; font-weight: bold; }
 
+        /* --- SEARCH --- */
         .search-container { max-width: 500px; margin: 0 auto 50px; padding: 0 20px; position: relative; }
         .search-container input { 
             width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(99, 102, 241, 0.3); 
@@ -94,12 +99,14 @@
             font-size: 16px;
         }
 
+        /* --- HERO --- */
         .hero { text-align: center; margin-bottom: 60px; padding: 0 20px; }
         .update-tag { background: rgba(99, 102, 241, 0.15); color: var(--primary-glow); padding: 8px 20px; border-radius: 50px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 20px; border: 1px solid rgba(99, 102, 241, 0.2); text-transform: uppercase; }
         .hero h2 { font-size: 38px; font-weight: 900; text-transform: uppercase; font-style: italic; line-height: 1.1; margin-bottom: 15px; }
         .hero h2 span { background: linear-gradient(to bottom, #a5b4fc, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero p.sub { color: var(--text-dim); font-size: 14px; line-height: 1.6; }
 
+        /* --- CARDS --- */
         .section-title { padding-left: 5%; font-size: 22px; font-weight: 900; font-style: italic; text-transform: uppercase; margin-bottom: 25px; margin-top: 40px; border-left: 4px solid var(--primary-glow); margin-left: 5%; }
         .card-grid { padding: 0 5%; display: flex; flex-direction: column; gap: 20px; }
         
@@ -134,6 +141,7 @@
         .btn.sub-lock { background: var(--yt-red); box-shadow: 0 0 20px rgba(255, 0, 0, 0.2); }
         .btn.sub-lock:hover { background: #cc0000; }
 
+        /* --- FLOATING DISCORD WITH BUBBLE --- */
         .help-container { 
             position: fixed; bottom: 30px; right: 30px; z-index: 100; 
             display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
@@ -187,7 +195,6 @@
 
     <div class="section-title">Latest Releases</div>
     <div class="card-grid">
-        <!-- SAILOR PIECE SCRIPT -->
         <div class="script-card">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(1).jpeg" class="game-icon">
@@ -201,7 +208,6 @@
             <button class="btn sub-lock lock-btn" onclick="handleScriptAction('loadstring(game:HttpGet(\'https://raw.githubusercontent.com/luacoder312/sailorscript/refs/heads/main/loader.lua\'))()')">Sub To Unlock! 🔒</button>
         </div>
 
-        <!-- CATCH AND TAME SCRIPT -->
         <div class="script-card">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(4).jpeg" class="game-icon">
@@ -245,7 +251,6 @@
 
     <div class="help-container">
         <div class="help-bubble">Still Need Help?</div>
-        <!-- UPDATED DISCORD LINK BELOW -->
         <div class="bot-btn" onclick="window.open('https://discord.gg/UWbbRHdXj', '_blank')">
             <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(3).png" class="discord-img">
         </div>
@@ -258,6 +263,7 @@
             if (localStorage.getItem('reevex_unlocked') === 'true') {
                 unlockAllButtons();
             }
+            createStars(); // Generate stars on load
         };
 
         function handleScriptAction(scriptText) {
@@ -287,14 +293,30 @@
             setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
-        const container = document.getElementById('particle-container');
-        for (let i = 0; i < 35; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.width = p.style.height = (Math.random() * 3 + 1) + 'px';
-            p.style.animationDuration = (Math.random() * 6 + 4) + 's';
-            container.appendChild(p);
+        // --- ✨ STAR GENERATION LOGIC ---
+        function createStars() {
+            const container = document.getElementById('particle-container');
+            const starCount = 60; // Total number of stars
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random position and size
+                const xy = Math.random() * 100;
+                star.style.left = xy + 'vw';
+                star.style.top = xy + 'vh';
+                const size = Math.random() * 3 + 1; // 1px to 4px
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                
+                // Random animation duration for varying speed (depth effect)
+                const duration = Math.random() * 10 + 5; // 5s to 15s
+                star.style.animationDuration = duration + 's';
+                star.style.animationDelay = `-${Math.random() * duration}s`; // Pre-warm animation
+                
+                container.appendChild(star);
+            }
         }
     </script>
 </body>
