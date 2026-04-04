@@ -61,9 +61,10 @@
             padding: 8px 12px;
             border-radius: 12px;
             cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
+            font-size: 11px;
+            font-weight: 800;
             backdrop-filter: blur(10px);
+            text-transform: uppercase;
         }
 
         #notification {
@@ -104,9 +105,9 @@
 
         .brand-text h1 { font-size: 32px; font-style: italic; font-weight: 900; line-height: 1; text-transform: uppercase; }
         .brand-text .scripts-word { color: var(--primary-glow); }
-        .brand-text p { font-size: 12px; letter-spacing: 3px; color: var(--text-dim); margin-top: 5px; font-weight: bold; }
+        .brand-text p { font-size: 10px; letter-spacing: 3px; color: var(--text-dim); margin-top: 5px; font-weight: bold; }
 
-        .search-container { max-width: 500px; margin: 0 auto 50px; padding: 0 20px; position: relative; }
+        .search-container { max-width: 500px; margin: 0 auto 50px; padding: 0 20px; }
         .search-container input { 
             width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(99, 102, 241, 0.3); 
             padding: 18px 25px; border-radius: 50px; color: white; outline: none; transition: 0.3s;
@@ -114,12 +115,12 @@
         }
 
         .hero { text-align: center; margin-bottom: 60px; padding: 0 20px; }
-        .update-tag { background: rgba(99, 102, 241, 0.15); color: var(--primary-glow); padding: 8px 20px; border-radius: 50px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 20px; border: 1px solid rgba(99, 102, 241, 0.2); text-transform: uppercase; }
-        .hero h2 { font-size: 38px; font-weight: 900; text-transform: uppercase; font-style: italic; line-height: 1.1; margin-bottom: 15px; }
+        .update-tag { background: rgba(99, 102, 241, 0.15); color: var(--primary-glow); padding: 8px 20px; border-radius: 50px; font-size: 10px; font-weight: 800; display: inline-block; margin-bottom: 20px; border: 1px solid rgba(99, 102, 241, 0.2); text-transform: uppercase; }
+        .hero h2 { font-size: 36px; font-weight: 900; text-transform: uppercase; font-style: italic; line-height: 1.1; margin-bottom: 15px; }
         .hero h2 span { background: linear-gradient(to bottom, #a5b4fc, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero p.sub { color: var(--text-dim); font-size: 14px; line-height: 1.6; }
 
-        .section-title { padding-left: 5%; font-size: 22px; font-weight: 900; font-style: italic; text-transform: uppercase; margin-bottom: 25px; margin-top: 40px; border-left: 4px solid var(--primary-glow); margin-left: 5%; }
+        .section-title { padding-left: 5%; font-size: 20px; font-weight: 900; font-style: italic; text-transform: uppercase; margin-bottom: 25px; margin-top: 40px; border-left: 4px solid var(--primary-glow); margin-left: 5%; }
         .card-grid { padding: 0 5%; display: flex; flex-direction: column; gap: 20px; }
         
         .script-card, .exec-card {
@@ -133,8 +134,8 @@
         
         .status-tag { font-size: 10px; font-weight: 800; color: var(--success); text-transform: uppercase; margin-bottom: 4px; display: block; }
         .download-tag { font-size: 10px; font-weight: 800; color: var(--warning); text-transform: uppercase; margin-bottom: 4px; display: block; }
-        .card-title { font-size: 22px; font-weight: 900; font-style: italic; text-transform: uppercase; }
-        .card-desc { color: var(--text-dim); font-size: 13px; margin-top: 4px; }
+        .card-title { font-size: 20px; font-weight: 900; font-style: italic; text-transform: uppercase; }
+        .card-desc { color: var(--text-dim); font-size: 12px; margin-top: 4px; }
 
         .script-display { 
             background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; 
@@ -146,10 +147,9 @@
             width: 100%; background: var(--primary-glow); color: white; border: none; 
             padding: 16px; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; 
             text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px;
-            text-transform: uppercase;
+            text-transform: uppercase; font-size: 14px;
         }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.3); }
-        
         .btn.sub-lock { background: var(--yt-red); box-shadow: 0 0 20px rgba(255, 0, 0, 0.2); }
 
         .help-container { 
@@ -206,6 +206,7 @@
 
     <div class="section-title">Latest Releases</div>
     <div class="card-grid">
+        <!-- SAILOR PIECE SCRIPT -->
         <div class="script-card hover-sfx">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(1).jpeg" class="game-icon">
@@ -219,6 +220,7 @@
             <button class="btn sub-lock lock-btn hover-sfx" onclick="handleScriptAction('loadstring(game:HttpGet(\'https://raw.githubusercontent.com/luacoder312/sailorscript/refs/heads/main/loader.lua\'))()')">Sub To Unlock! 🔒</button>
         </div>
 
+        <!-- CATCH AND TAME SCRIPT -->
         <div class="script-card hover-sfx">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(4).jpeg" class="game-icon">
@@ -235,6 +237,7 @@
 
     <div class="section-title">Executer Download Links</div>
     <div class="card-grid">
+        <!-- DELTA -->
         <div class="exec-card hover-sfx">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(3).jpeg" class="game-icon">
@@ -245,6 +248,19 @@
                 </div>
             </div>
             <a href="https://deltaexploits.gg/" target="_blank" class="btn hover-sfx">DOWNLOAD 🚀</a>
+        </div>
+
+        <!-- ALL IN ONE -->
+        <div class="exec-card hover-sfx">
+            <div class="card-header">
+                <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/unnamed.png" class="game-icon">
+                <div>
+                    <span class="download-tag">Multi-Device</span>
+                    <div class="card-title">All-In-One Executer</div>
+                    <p class="card-desc">Executors for every platform.</p>
+                </div>
+            </div>
+            <a href="https://wearedevs.net/exploits" target="_blank" class="btn hover-sfx">DOWNLOAD EXECUTERS 📁</a>
         </div>
     </div>
 
@@ -269,7 +285,6 @@
             document.getElementById('muteBtn').innerHTML = isMuted ? "🔇 SOUND: OFF" : "🔊 SOUND: ON";
         }
 
-        // Apply hover sounds to all elements with 'hover-sfx' class
         document.querySelectorAll('.hover-sfx').forEach(el => {
             el.addEventListener('mouseenter', () => playSound(hoverSfx));
         });
@@ -286,10 +301,10 @@
         function handleScriptAction(scriptText) {
             if (localStorage.getItem('reevex_unlocked') === 'true') {
                 navigator.clipboard.writeText(scriptText);
-                playSound(copySfx); // PLAY COPY SOUND
+                playSound(copySfx);
                 showToast("SCRIPT COPIED! 📋");
             } else {
-                playSound(unlockSfx); // PLAY UNLOCK SOUND
+                playSound(unlockSfx);
                 window.open(ytLink, '_blank');
                 localStorage.setItem('reevex_unlocked', 'true');
                 unlockAllButtons();
@@ -319,7 +334,7 @@
                 star.className = 'star';
                 star.style.left = Math.random() * 100 + 'vw';
                 star.style.top = Math.random() * 100 + 'vh';
-                const size = Math.random() * 3 + 1;
+                const size = Math.random() * 2 + 1;
                 star.style.width = size + 'px'; star.style.height = size + 'px';
                 const duration = Math.random() * 10 + 5;
                 star.style.animationDuration = duration + 's';
