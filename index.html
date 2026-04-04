@@ -25,6 +25,7 @@
             min-height: 100vh;
             overflow-x: hidden;
             padding-bottom: 100px;
+            cursor: pointer;
         }
 
         /* --- ✨ ANIMATED STAR BACKGROUND --- */
@@ -179,9 +180,9 @@
         .discord-img { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
-<body onclick="startMusic()">
+<body>
 
-    <button class="sound-toggle sfx-trigger" onclick="toggleMute(event)" id="muteBtn">🔊 SOUND: ON</button>
+    <button class="sound-toggle sfx-trigger" id="muteBtn">🔊 SOUND: ON</button>
     <div id="particle-container"></div>
     <div id="notification">SUCCESSFULLY COPIED! 📋</div>
 
@@ -207,6 +208,7 @@
 
     <div class="section-title">Latest Releases</div>
     <div class="card-grid">
+        <!-- SAILOR PIECE -->
         <div class="script-card sfx-trigger">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(1).jpeg" class="game-icon">
@@ -220,6 +222,7 @@
             <button class="btn sub-lock lock-btn sfx-trigger" onclick="handleScriptAction('loadstring(game:HttpGet(\'https://raw.githubusercontent.com/luacoder312/sailorscript/refs/heads/main/loader.lua\'))()')">Sub To Unlock! 🔒</button>
         </div>
 
+        <!-- CATCH AND TAME -->
         <div class="script-card sfx-trigger">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(4).jpeg" class="game-icon">
@@ -269,10 +272,10 @@
     </div>
 
     <script>
-        // --- 🔊 SOUND & MUSIC ENGINE ---
-        const bgMusic = new Audio('https://www.chosic.com/wp-content/uploads/2021/04/And-So-It-Begins-Inspired-By-Crush-Lo-fi-Hip-Hop.mp3');
+        // --- 🔊 SOUND SYSTEM ---
+        const bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
         bgMusic.loop = true;
-        bgMusic.volume = 0.2; // 20% Volume for peaceful background
+        bgMusic.volume = 0.15;
 
         const hoverSfx = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
         const unlockSfx = new Audio('https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3');
@@ -281,12 +284,31 @@
         let isMuted = false;
         let musicStarted = false;
 
-        function startMusic() {
+        // Unlock music on ANY interaction
+        const startAudio = () => {
             if (!musicStarted && !isMuted) {
-                bgMusic.play().catch(() => {});
+                bgMusic.play().then(() => {
+                    musicStarted = true;
+                    console.log("Audio Unlocked");
+                }).catch(e => console.log("Still blocked", e));
+            }
+        };
+
+        window.addEventListener('mousedown', startAudio);
+        window.addEventListener('touchstart', startAudio);
+
+        document.getElementById('muteBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            isMuted = !isMuted;
+            if (isMuted) {
+                bgMusic.pause();
+                document.getElementById('muteBtn').innerHTML = "🔇 SOUND: OFF";
+            } else {
+                bgMusic.play();
+                document.getElementById('muteBtn').innerHTML = "🔊 SOUND: ON";
                 musicStarted = true;
             }
-        }
+        });
 
         function playSound(audio) {
             if(!isMuted) {
@@ -295,20 +317,7 @@
             }
         }
 
-        function toggleMute(event) {
-            event.stopPropagation(); // Prevents startMusic from triggering immediately
-            isMuted = !isMuted;
-            if (isMuted) {
-                bgMusic.pause();
-                document.getElementById('muteBtn').innerHTML = "🔇 SOUND: OFF";
-            } else {
-                bgMusic.play().catch(() => {});
-                document.getElementById('muteBtn').innerHTML = "🔊 SOUND: ON";
-            }
-        }
-
-        const sfxElements = document.querySelectorAll('.sfx-trigger');
-        sfxElements.forEach(el => {
+        document.querySelectorAll('.sfx-trigger').forEach(el => {
             el.addEventListener('mouseenter', () => playSound(hoverSfx));
             el.addEventListener('touchstart', () => playSound(hoverSfx), {passive: true});
         });
