@@ -65,6 +65,7 @@
             font-weight: 800;
             backdrop-filter: blur(10px);
             text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
         }
 
         #notification {
@@ -178,9 +179,9 @@
         .discord-img { width: 100%; height: 100%; object-fit: cover; }
     </style>
 </head>
-<body>
+<body onclick="startMusic()">
 
-    <button class="sound-toggle sfx-trigger" onclick="toggleMute()" id="muteBtn">🔊 SOUND: ON</button>
+    <button class="sound-toggle sfx-trigger" onclick="toggleMute(event)" id="muteBtn">🔊 SOUND: ON</button>
     <div id="particle-container"></div>
     <div id="notification">SUCCESSFULLY COPIED! 📋</div>
 
@@ -206,7 +207,6 @@
 
     <div class="section-title">Latest Releases</div>
     <div class="card-grid">
-        <!-- SAILOR PIECE -->
         <div class="script-card sfx-trigger">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(1).jpeg" class="game-icon">
@@ -220,7 +220,6 @@
             <button class="btn sub-lock lock-btn sfx-trigger" onclick="handleScriptAction('loadstring(game:HttpGet(\'https://raw.githubusercontent.com/luacoder312/sailorscript/refs/heads/main/loader.lua\'))()')">Sub To Unlock! 🔒</button>
         </div>
 
-        <!-- CATCH AND TAME -->
         <div class="script-card sfx-trigger">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(4).jpeg" class="game-icon">
@@ -237,7 +236,6 @@
 
     <div class="section-title">Executer Download Links</div>
     <div class="card-grid">
-        <!-- DELTA -->
         <div class="exec-card sfx-trigger">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(3).jpeg" class="game-icon">
@@ -250,7 +248,6 @@
             <a href="https://deltaexploits.gg/" target="_blank" class="btn sfx-trigger">DOWNLOAD 🚀</a>
         </div>
 
-        <!-- ALL IN ONE BOX -->
         <div class="exec-card sfx-trigger">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/unnamed.png" class="game-icon">
@@ -272,27 +269,44 @@
     </div>
 
     <script>
-        // --- 🔊 SOUND ENGINE ---
+        // --- 🔊 SOUND & MUSIC ENGINE ---
+        const bgMusic = new Audio('https://www.chosic.com/wp-content/uploads/2021/04/And-So-It-Begins-Inspired-By-Crush-Lo-fi-Hip-Hop.mp3');
+        bgMusic.loop = true;
+        bgMusic.volume = 0.2; // 20% Volume for peaceful background
+
         const hoverSfx = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
         const unlockSfx = new Audio('https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3');
         const copySfx = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
         
         let isMuted = false;
+        let musicStarted = false;
+
+        function startMusic() {
+            if (!musicStarted && !isMuted) {
+                bgMusic.play().catch(() => {});
+                musicStarted = true;
+            }
+        }
 
         function playSound(audio) {
             if(!isMuted) {
                 audio.currentTime = 0;
-                // Browsers require a promise catch for audio
-                audio.play().catch(() => { /* Silence errors until first interaction */ });
+                audio.play().catch(() => {});
             }
         }
 
-        function toggleMute() {
+        function toggleMute(event) {
+            event.stopPropagation(); // Prevents startMusic from triggering immediately
             isMuted = !isMuted;
-            document.getElementById('muteBtn').innerHTML = isMuted ? "🔇 SOUND: OFF" : "🔊 SOUND: ON";
+            if (isMuted) {
+                bgMusic.pause();
+                document.getElementById('muteBtn').innerHTML = "🔇 SOUND: OFF";
+            } else {
+                bgMusic.play().catch(() => {});
+                document.getElementById('muteBtn').innerHTML = "🔊 SOUND: ON";
+            }
         }
 
-        // Apply Tick sound to Hover (PC) AND Touch (Mobile)
         const sfxElements = document.querySelectorAll('.sfx-trigger');
         sfxElements.forEach(el => {
             el.addEventListener('mouseenter', () => playSound(hoverSfx));
