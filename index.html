@@ -219,6 +219,7 @@
 
     <div class="section-title">Latest Releases</div>
     <div class="card-grid">
+        <!-- GROW A GARDEN 2: PET FINDER -->
         <div class="script-card locked-card sfx-trigger" id="gardenCard">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(2).jpeg" class="game-icon">
@@ -229,7 +230,21 @@
                 </div>
             </div>
             <div class="script-display" id="gardenScriptText">••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••</div>
-            <button class="btn link-lock lock-btn sfx-trigger" id="actionBtn" onclick="handleScriptLock()">Unlock Script 🔗</button>
+            <button class="btn link-lock lock-btn sfx-trigger" id="actionBtn" onclick="handleScriptLock('garden')">Unlock Script 🔗</button>
+        </div>
+
+        <!-- GROW A GARDEN 2: MOZILSCRIPTS -->
+        <div class="script-card locked-card sfx-trigger" id="mozilCard">
+            <div class="card-header">
+                <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(2).jpeg" class="game-icon">
+                <div>
+                    <span class="status-tag">● Working</span>
+                    <div class="card-title">Grow A Garden 2 | KoshiHub</div>
+                    <p class="card-desc">Elite multi-feature script for Grow A Garden 2!</p>
+                </div>
+            </div>
+            <div class="script-display" id="mozilScriptText">••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••</div>
+            <button class="btn link-lock lock-btn sfx-trigger" id="mozilActionBtn" onclick="handleScriptLock('mozil')">Unlock Script 🔗</button>
         </div>
     </div>
 
@@ -270,7 +285,11 @@
     <script>
         // --- ⚙️ CONFIGURATION ---
         const LINK_LOCKER_URL = "https://linkunlocker.com/do-task-to-get-script-access-3U28W"; 
-        const REAL_SCRIPT = `loadstring(game:HttpGet("https://raw.githubusercontent.com/HARSH3123/KoshiHubxRee_Vex/refs/heads/main/petfinder.lua"))()`;
+        
+        const SCRIPTS = {
+            garden: `loadstring(game:HttpGet("https://raw.githubusercontent.com/HARSH3123/KoshiHubxRee_Vex/refs/heads/main/petfinder.lua"))()`,
+            mozil: `loadstring(game:HttpGet("https://raw.githubusercontent.com/luacoder312/KoshiHubxRee_vex/refs/heads/main/mozilscripts.lua"))()`
+        };
 
         // --- 🔊 SOUND SYSTEM ---
         const bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
@@ -327,7 +346,7 @@
             // Check if they are returning from LinkUnlocker OR if they already unlocked it before
             if (urlParams.get('unlocked') === 'true' || localStorage.getItem('garden_unlocked') === 'true') {
                 localStorage.setItem('garden_unlocked', 'true');
-                revealContent();
+                revealAllContent();
                 
                 // Clean up the URL bar so it looks neat
                 if(urlParams.get('unlocked') === 'true') {
@@ -337,10 +356,10 @@
             createStars();
         };
 
-        function handleScriptLock() {
+        function handleScriptLock(scriptKey) {
             if (localStorage.getItem('garden_unlocked') === 'true') {
                 // If unlocked, it copies instantly
-                navigator.clipboard.writeText(REAL_SCRIPT);
+                navigator.clipboard.writeText(SCRIPTS[scriptKey]);
                 playSound(copySfx);
                 showToast("SCRIPT COPIED! 📋");
             } else {
@@ -350,16 +369,27 @@
             }
         }
 
-        function revealContent() {
-            const card = document.getElementById('gardenCard');
-            const scriptText = document.getElementById('gardenScriptText');
-            const actionBtn = document.getElementById('actionBtn');
+        function revealAllContent() {
+            // Unblur Garden / Pet Finder Card
+            const gardenCard = document.getElementById('gardenCard');
+            const gardenText = document.getElementById('gardenScriptText');
+            const gardenBtn = document.getElementById('actionBtn');
+            if(gardenCard && gardenText && gardenBtn) {
+                gardenCard.classList.remove('locked-card');
+                gardenText.innerText = SCRIPTS.garden;
+                gardenBtn.classList.remove('link-lock');
+                gardenBtn.innerHTML = "Copy Script 📋";
+            }
 
-            if(card && scriptText && actionBtn) {
-                card.classList.remove('locked-card');
-                scriptText.innerText = REAL_SCRIPT;
-                actionBtn.classList.remove('link-lock');
-                actionBtn.innerHTML = "Copy Script 📋";
+            // Unblur Mozil / KoshiHub Card
+            const mozilCard = document.getElementById('mozilCard');
+            const mozilText = document.getElementById('mozilScriptText');
+            const mozilBtn = document.getElementById('mozilActionBtn');
+            if(mozilCard && mozilText && mozilBtn) {
+                mozilCard.classList.remove('locked-card');
+                mozilText.innerText = SCRIPTS.mozil;
+                mozilBtn.classList.remove('link-lock');
+                mozilBtn.innerHTML = "Copy Script 📋";
             }
         }
 
