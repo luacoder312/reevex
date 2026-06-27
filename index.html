@@ -129,9 +129,19 @@
             background: var(--bg-card); border-radius: 25px; padding: 25px;
             border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px);
             transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- 🔒 BLUR LOCK STYLING --- */
+        .script-card.locked-card .card-header,
+        .script-card.locked-card .script-display {
+            filter: blur(6px);
+            pointer-events: none;
+            user-select: none;
         }
         
-        .card-header { display: flex; align-items: center; gap: 20px; margin-bottom: 15px; }
+        .card-header { display: flex; align-items: center; gap: 20px; margin-bottom: 15px; transition: filter 0.3s ease; }
         .game-icon { width: 70px; height: 70px; border-radius: 18px; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); background: #000; }
         
         .status-tag { font-size: 10px; font-weight: 800; color: var(--success); text-transform: uppercase; margin-bottom: 4px; display: block; }
@@ -143,6 +153,7 @@
             background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; 
             margin: 15px 0; font-family: monospace; font-size: 11px; color: #818cf8; 
             overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border: 1px solid rgba(255,255,255,0.05);
+            transition: filter 0.3s ease;
         }
 
         .btn { 
@@ -152,7 +163,7 @@
             text-transform: uppercase; font-size: 14px;
         }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.3); }
-        .btn.sub-lock { background: var(--yt-red); box-shadow: 0 0 20px rgba(255, 0, 0, 0.2); }
+        .btn.link-lock { background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%); box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
 
         .help-container { 
             position: fixed; bottom: 30px; right: 30px; z-index: 100; 
@@ -208,32 +219,18 @@
 
     <div class="section-title">Latest Releases</div>
     <div class="card-grid">
-        <!-- SAILOR PIECE -->
-        <div class="script-card sfx-trigger">
+        <!-- GROW A GARDEN 2: PET FINDER -->
+        <div class="script-card locked-card sfx-trigger" id="gardenCard">
             <div class="card-header">
-                <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(1).jpeg" class="game-icon">
+                <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(2).jpeg" class="game-icon">
                 <div>
                     <span class="status-tag">● Working</span>
-                    <div class="card-title">[✨MOON] SAILOR PIECE</div>
-                    <p class="card-desc">Elite script for Sailor Piece enthusiasts!</p>
+                    <div class="card-title">Grow A Garden 2 | Pet Finder</div>
+                    <p class="card-desc">Instantly locate hidden pets effortlessly!</p>
                 </div>
             </div>
-            <div class="script-display">loadstring(game:HttpGet("https://raw.githubusercontent.com/luacoder312/sailorscript/refs/heads/main/loader.lua"))()</div>
-            <button class="btn sub-lock lock-btn sfx-trigger" onclick="handleScriptAction('loadstring(game:HttpGet(\'https://raw.githubusercontent.com/luacoder312/sailorscript/refs/heads/main/loader.lua\'))()')">Sub To Unlock! 🔒</button>
-        </div>
-
-        <!-- CATCH AND TAME -->
-        <div class="script-card sfx-trigger">
-            <div class="card-header">
-                <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(4).jpeg" class="game-icon">
-                <div>
-                    <span class="status-tag">● Working</span>
-                    <div class="card-title">👣 Catch And Tame</div>
-                    <p class="card-desc">Top tier script for Catch and Tame!</p>
-                </div>
-            </div>
-            <div class="script-display">loadstring(game:HttpGet("https://raw.githubusercontent.com/luacoder312/ree_vex/refs/heads/main/loader.lua"))()</div>
-            <button class="btn sub-lock lock-btn sfx-trigger" onclick="handleScriptAction('loadstring(game:HttpGet(\'https://raw.githubusercontent.com/luacoder312/ree_vex/refs/heads/main/loader.lua\'))()')">Sub To Unlock! 🔒</button>
+            <div class="script-display" id="gardenScriptText">••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••</div>
+            <button class="btn link-lock lock-btn sfx-trigger" id="actionBtn" onclick="handleScriptLock()">Unlock Script 🔗</button>
         </div>
     </div>
 
@@ -272,6 +269,10 @@
     </div>
 
     <script>
+        // --- ⚙️ CONFIGURATION ---
+        const LINK_LOCKER_URL = "https://linkunlocker.com/sub-to-get-script-on-website-xnRma"; 
+        const REAL_SCRIPT = `loadstring(game:HttpGet("https://raw.githubusercontent.com/HARSH3123/KoshiHubxRee_Vex/refs/heads/main/petfinder.lua"))()`;
+
         // --- 🔊 SOUND SYSTEM ---
         const bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
         bgMusic.loop = true;
@@ -284,13 +285,11 @@
         let isMuted = false;
         let musicStarted = false;
 
-        // Unlock music on ANY interaction
         const startAudio = () => {
             if (!musicStarted && !isMuted) {
                 bgMusic.play().then(() => {
                     musicStarted = true;
-                    console.log("Audio Unlocked");
-                }).catch(e => console.log("Still blocked", e));
+                }).catch(e => console.log("Audio waiting for user gesture.", e));
             }
         };
 
@@ -322,35 +321,47 @@
             el.addEventListener('touchstart', () => playSound(hoverSfx), {passive: true});
         });
 
-        const ytLink = "https://www.youtube.com/@ree_vex";
-
+        // --- 🔒 SMART LINK UNLOCKER CHECK ---
         window.onload = function() {
-            if (localStorage.getItem('reevex_unlocked') === 'true') {
-                unlockAllButtons();
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Check if they are returning from LinkUnlocker OR if they already unlocked it before
+            if (urlParams.get('unlocked') === 'true' || localStorage.getItem('garden_unlocked') === 'true') {
+                localStorage.setItem('garden_unlocked', 'true');
+                revealContent();
+                
+                // Clean up the URL bar so it looks neat
+                if(urlParams.get('unlocked') === 'true') {
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
             }
             createStars();
         };
 
-        function handleScriptAction(scriptText) {
-            if (localStorage.getItem('reevex_unlocked') === 'true') {
-                navigator.clipboard.writeText(scriptText);
+        function handleScriptLock() {
+            if (localStorage.getItem('garden_unlocked') === 'true') {
+                // If unlocked, it copies instantly
+                navigator.clipboard.writeText(REAL_SCRIPT);
                 playSound(copySfx);
                 showToast("SCRIPT COPIED! 📋");
             } else {
+                // If locked, redirect to LinkUnlocker task page
                 playSound(unlockSfx);
-                window.open(ytLink, '_blank');
-                localStorage.setItem('reevex_unlocked', 'true');
-                unlockAllButtons();
-                showToast("UNLOCKED! TAP AGAIN TO COPY");
+                window.location.href = LINK_LOCKER_URL; 
             }
         }
 
-        function unlockAllButtons() {
-            const btns = document.querySelectorAll('.lock-btn');
-            btns.forEach(btn => {
-                btn.classList.remove('sub-lock');
-                btn.innerHTML = "Copy Script 📋";
-            });
+        function revealContent() {
+            const card = document.getElementById('gardenCard');
+            const scriptText = document.getElementById('gardenScriptText');
+            const actionBtn = document.getElementById('actionBtn');
+
+            if(card && scriptText && actionBtn) {
+                card.classList.remove('locked-card');
+                scriptText.innerText = REAL_SCRIPT;
+                actionBtn.classList.remove('link-lock');
+                actionBtn.innerHTML = "Copy Script 📋";
+            }
         }
 
         function showToast(msg) {
