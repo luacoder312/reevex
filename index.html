@@ -135,6 +135,7 @@
 
         /* --- 🔒 BLUR LOCK STYLING --- */
         .script-card.locked-card .card-header,
+        .script-card.locked-card .feature-list,
         .script-card.locked-card .script-display {
             filter: blur(6px);
             pointer-events: none;
@@ -148,6 +149,10 @@
         .download-tag { font-size: 10px; font-weight: 800; color: var(--warning); text-transform: uppercase; margin-bottom: 4px; display: block; }
         .card-title { font-size: 20px; font-weight: 900; font-style: italic; text-transform: uppercase; }
         .card-desc { color: var(--text-dim); font-size: 12px; margin-top: 4px; }
+
+        /* --- FEATURE LIST --- */
+        .feature-list { margin: 15px 0; padding-left: 5px; display: flex; flex-direction: column; gap: 6px; transition: filter 0.3s ease; }
+        .feature-item { font-size: 13px; font-weight: 600; color: #e2e8f0; display: flex; align-items: center; gap: 8px; }
 
         .script-display { 
             background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; 
@@ -219,32 +224,26 @@
 
     <div class="section-title">Latest Releases</div>
     <div class="card-grid">
-        <!-- GROW A GARDEN 2: PET FINDER -->
         <div class="script-card locked-card sfx-trigger" id="gardenCard">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(2).jpeg" class="game-icon">
                 <div>
                     <span class="status-tag">● Working</span>
-                    <div class="card-title">Grow A Garden 2 | Pet Finder</div>
-                    <p class="card-desc">Instantly locate hidden pets effortlessly!</p>
+                    <div class="card-title">reevex main hub grow a garden 2</div>
+                    <p class="card-desc">The ultimate utility package for Grow A Garden 2.</p>
                 </div>
             </div>
+            
+            <div class="feature-list">
+                <div class="feature-item">🍅 Fruit Multiplier</div>
+                <div class="feature-item">💲 Double or Nothing</div>
+                <div class="feature-item">📦 Seed Pack Spawner</div>
+                <div class="feature-item">🌱 Seed Spawner</div>
+                <div class="feature-item">⚙️ Dupe For Seeds And Gears</div>
+            </div>
+
             <div class="script-display" id="gardenScriptText">••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••</div>
             <button class="btn link-lock lock-btn sfx-trigger" id="actionBtn" onclick="handleScriptLock('garden')">Unlock Script 🔗</button>
-        </div>
-
-        <!-- GROW A GARDEN 2: MOZILSCRIPTS -->
-        <div class="script-card locked-card sfx-trigger" id="mozilCard">
-            <div class="card-header">
-                <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(2).jpeg" class="game-icon">
-                <div>
-                    <span class="status-tag">● Working</span>
-                    <div class="card-title">Grow A Garden 2 | KoshiHubxMozilhub</div>
-                    <p class="card-desc">PET SPAWNER SCRIPT!</p>
-                </div>
-            </div>
-            <div class="script-display" id="mozilScriptText">••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••</div>
-            <button class="btn link-lock lock-btn sfx-trigger" id="mozilActionBtn" onclick="handleScriptLock('mozil')">Unlock Script 🔗</button>
         </div>
     </div>
 
@@ -287,8 +286,7 @@
         const LINK_LOCKER_URL = "https://linkunlocker.com/do-task-to-get-script-access-3U28W"; 
         
         const SCRIPTS = {
-            garden: `loadstring(game:HttpGet("https://raw.githubusercontent.com/HARSH3123/KoshiHubxRee_Vex/refs/heads/main/petfinder.lua"))()`,
-            mozil: `loadstring(game:HttpGet("https://raw.githubusercontent.com/luacoder312/KoshiHubxRee_vex/refs/heads/main/mozilscripts.lua"))()`
+            garden: `loadstring(game:HttpGet("https://raw.githubusercontent.com/luacoder312/reevexhub/refs/heads/main/growagarden2.lua"))()`
         };
 
         // --- 🔊 SOUND SYSTEM ---
@@ -370,7 +368,7 @@
         }
 
         function revealAllContent() {
-            // Unblur Garden / Pet Finder Card
+            // Unblur Garden Hub Card
             const gardenCard = document.getElementById('gardenCard');
             const gardenText = document.getElementById('gardenScriptText');
             const gardenBtn = document.getElementById('actionBtn');
@@ -379,17 +377,6 @@
                 gardenText.innerText = SCRIPTS.garden;
                 gardenBtn.classList.remove('link-lock');
                 gardenBtn.innerHTML = "Copy Script 📋";
-            }
-
-            // Unblur Mozil / KoshiHub Card
-            const mozilCard = document.getElementById('mozilCard');
-            const mozilText = document.getElementById('mozilScriptText');
-            const mozilBtn = document.getElementById('mozilActionBtn');
-            if(mozilCard && mozilText && mozilBtn) {
-                mozilCard.classList.remove('locked-card');
-                mozilText.innerText = SCRIPTS.mozil;
-                mozilBtn.classList.remove('link-lock');
-                mozilBtn.innerHTML = "Copy Script 📋";
             }
         }
 
