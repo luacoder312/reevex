@@ -224,6 +224,21 @@
 
     <div class="section-title">Latest Releases</div>
     <div class="card-grid">
+        <!-- ZEPHYR HUB SPAWNER SCRIPT -->
+        <div class="script-card locked-card sfx-trigger" id="zephyrCard">
+            <div class="card-header">
+                <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(2).jpeg" class="game-icon">
+                <div>
+                    <span class="status-tag">● Working</span>
+                    <div class="card-title">Zephyr Hub Spawner Script</div>
+                    <p class="card-desc">Advanced item and feature spawner utility.</p>
+                </div>
+            </div>
+            <div class="script-display" id="zephyrScriptText">••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••</div>
+            <button class="btn link-lock lock-btn sfx-trigger" id="zephyrActionBtn" onclick="handleScriptLock('zephyr')">Unlock Script 🔗</button>
+        </div>
+
+        <!-- REEVEX MAIN HUB GROW A GARDEN 2 -->
         <div class="script-card locked-card sfx-trigger" id="gardenCard">
             <div class="card-header">
                 <img src="https://raw.githubusercontent.com/luacoder312/reevex/refs/heads/main/images%20(2).jpeg" class="game-icon">
@@ -233,7 +248,6 @@
                     <p class="card-desc">The ultimate utility package for Grow A Garden 2.</p>
                 </div>
             </div>
-            
             <div class="feature-list">
                 <div class="feature-item">🍅 Fruit Multiplier</div>
                 <div class="feature-item">💲 Double or Nothing</div>
@@ -241,7 +255,6 @@
                 <div class="feature-item">🌱 Seed Spawner</div>
                 <div class="feature-item">⚙️ Dupe For Seeds And Gears</div>
             </div>
-
             <div class="script-display" id="gardenScriptText">••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••</div>
             <button class="btn link-lock lock-btn sfx-trigger" id="actionBtn" onclick="handleScriptLock('garden')">Unlock Script 🔗</button>
         </div>
@@ -286,6 +299,7 @@
         const LINK_LOCKER_URL = "https://linkunlocker.com/do-task-to-get-script-access-3U28W"; 
         
         const SCRIPTS = {
+            zephyr: `loadstring(game:HttpGet("https://raw.githubusercontent.com/luacoder312/Zephyr_Hub/refs/heads/main/spawner.lua"))()`,
             garden: `loadstring(game:HttpGet("https://raw.githubusercontent.com/luacoder312/reevexhub/refs/heads/main/growagarden2.lua"))()`
         };
 
@@ -368,6 +382,17 @@
         }
 
         function revealAllContent() {
+            // Unblur Zephyr Hub Card
+            const zephyrCard = document.getElementById('zephyrCard');
+            const zephyrText = document.getElementById('zephyrScriptText');
+            const zephyrBtn = document.getElementById('zephyrActionBtn');
+            if(zephyrCard && zephyrText && zephyrBtn) {
+                zephyrCard.classList.remove('locked-card');
+                zephyrText.innerText = SCRIPTS.zephyr;
+                zephyrBtn.classList.remove('link-lock');
+                zephyrBtn.innerHTML = "Copy Script 📋";
+            }
+
             // Unblur Garden Hub Card
             const gardenCard = document.getElementById('gardenCard');
             const gardenText = document.getElementById('gardenScriptText');
